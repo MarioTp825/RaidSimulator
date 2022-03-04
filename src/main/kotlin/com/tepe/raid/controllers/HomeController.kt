@@ -57,7 +57,10 @@ class HomeController : Initializable {
     }
 
     private fun loadSettings(st: RaidSetting) {
-        loadData(st)
+        if(!loadData(st)) {
+            tInformation.text += "\nDatos inválidos, verificar información."
+            return
+        }
         val fxmlLoader = FXMLLoader(
             HelloApplication::class.java.getResource(
                 when (st) {
@@ -82,7 +85,6 @@ class HomeController : Initializable {
             diskNumber = tfDiscNumber.text.toIntOrNull().let { it?:-1 }
             diskSize = tfDiscSize.text.toIntOrNull().let { it?:-1 }
         }
-
         return raid.diskSize != -1 || raid.diskNumber != -1
     }
     //francon.lopezm@gmail.com
