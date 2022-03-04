@@ -62,7 +62,7 @@ class Postgres : Implementation {
         TODO("Not yet implemented")
     }
 
-    override fun readAt(disk: String): String {
+    override fun readAt(index: Int, disk:String): String? {
         TODO("Not yet implemented")
     }
 
@@ -78,6 +78,11 @@ class Postgres : Implementation {
     }
 
     override fun startService() {
+        if(connection != null
+            && !connection!!.isClosed
+            && statement != null
+            && !statement!!.isClosed) return
+
         Class.forName("org.postgresql.Driver")
         connection = DriverManager.getConnection(postgresConnection, user, password)
 
@@ -88,7 +93,8 @@ class Postgres : Implementation {
     }
 
     override fun closeService() {
-        TODO("Not yet implemented")
+        statement?.closeOnCompletion()
+        connection?.close()
     }
 
     private fun execute(sql: String): ResultSet? {

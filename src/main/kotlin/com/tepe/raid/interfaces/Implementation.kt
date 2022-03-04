@@ -9,7 +9,7 @@ interface Implementation {
 
     fun writeAt(disk: String): Boolean
 
-    fun readAt(disk: String): String
+    fun readAt(index: Int, disk:String): String?
 
     fun deleteAt(disk: String): Boolean
 

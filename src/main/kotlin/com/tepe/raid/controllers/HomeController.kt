@@ -18,6 +18,8 @@ import java.net.URL
 import java.util.*
 
 class HomeController : Initializable {
+    private val raid = DataContainer.getInstance()
+
     @FXML
     private lateinit var apRaidSetting: AnchorPane
 
@@ -41,6 +43,16 @@ class HomeController : Initializable {
             "Raid 1 + 0",
             "Raid 0 + 1"
         )
+
+        cbRaids.valueProperty().addListener { _, _, new ->
+            tInformation.text = when (new.toString()) {
+                "Raid 0" -> "Se requiere como mínimo dos discos."
+                "Raid 1" -> "Se requiere como mínimo dos discos."
+                "Raid 5" -> "Se requiere como mínimo tres discos."
+                "Raid 1 + 0" -> "Se requiere como mínimo 4 discos."
+                else -> "Se requiere como mínimo 4 discos."
+            } + "\nRequiere como mínimo 20 de espacios."
+        }
     }
 
     @FXML
@@ -57,19 +69,27 @@ class HomeController : Initializable {
     }
 
     private fun loadSettings(st: RaidSetting) {
-        if(!loadData(st)) {
+        if (!loadData(st)) {
             tInformation.text += "\nDatos inválidos, verificar información."
             return
         }
+
+        if (
+            when (st) {
+                _0 -> raid.diskNumber > 1
+                _1 -> raid.diskNumber > 1
+                _5 -> raid.diskNumber > 2
+                _0_1 -> raid.diskNumber > 3
+                else -> raid.diskNumber > 3
+            } && raid.diskSize > 19
+        ) {
+            tInformation.text += "\nDatos inválidos, verificar los tamaños de los discos y su espacio."
+            return
+        }
+
         val fxmlLoader = FXMLLoader(
             HelloApplication::class.java.getResource(
-                when (st) {
-                    _0 -> "zero-raid"
-                    _1 -> "one-raid"
-                    _5 -> "five-raid"
-                    _0_1 -> "zero-one-raid"
-                    else -> "one-zero-raid"
-                } + ".fxml"
+                "answer.fxml"
             )
         )
         val scene = Scene(fxmlLoader.load(), 1000.0, 1000.0)
@@ -77,13 +97,12 @@ class HomeController : Initializable {
         HelloApplication.stage.scene = scene
     }
 
-    private fun loadData(st: RaidSetting):Boolean {
-        val raid = DataContainer.getInstance()
+    private fun loadData(st: RaidSetting): Boolean {
         raid.apply {
             clear()
             type = st
-            diskNumber = tfDiscNumber.text.toIntOrNull().let { it?:-1 }
-            diskSize = tfDiscSize.text.toIntOrNull().let { it?:-1 }
+            diskNumber = tfDiscNumber.text.toIntOrNull().let { it ?: -1 }
+            diskSize = tfDiscSize.text.toIntOrNull().let { it ?: -1 }
         }
         return raid.diskSize != -1 || raid.diskNumber != -1
     }

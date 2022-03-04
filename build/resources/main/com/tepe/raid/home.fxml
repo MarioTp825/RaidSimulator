@@ -30,12 +30,18 @@
                   <Font name="Montserrat Bold" size="13.0" />
                </font>
             </Text>
-            <Text fx:id="tInformation" fill="WHITE" layoutX="477.0" layoutY="364.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de raid:" textAlignment="CENTER">
+            <Text fx:id="tInformation" fill="WHITE" layoutX="343.0" layoutY="338.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="368.0">
                <font>
                   <Font name="Montserrat Bold" size="13.0" />
                </font>
             </Text>
             <Button layoutX="435.0" layoutY="440.0" mnemonicParsing="false" onAction="#onCreateRaid" prefHeight="94.0" prefWidth="167.0" text="Crear" />
+            <TextField fx:id="tfDiscSize" layoutX="538.0" layoutY="281.0" />
+            <Text fill="WHITE" layoutX="360.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tamaño de discos">
+               <font>
+                  <Font name="Montserrat Bold" size="13.0" />
+               </font>
+            </Text>
          </children></AnchorPane>
    </center>
 </BorderPane>

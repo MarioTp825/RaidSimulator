@@ -19,6 +19,12 @@ class DataContainer {
         type = null
     }
 
+    fun next() {
+        arrayDisk.forEach {
+            it.pointer++
+        }
+    }
+
     companion object {
         private var ct: DataContainer? = null
 
