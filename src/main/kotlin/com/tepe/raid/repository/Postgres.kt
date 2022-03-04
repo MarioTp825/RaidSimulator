@@ -58,7 +58,7 @@ class Postgres : Implementation {
         return successful
     }
 
-    override fun writeAt(disk: String): Boolean {
+    override fun writeAt(disk: String, data: String): Boolean {
         TODO("Not yet implemented")
     }
 

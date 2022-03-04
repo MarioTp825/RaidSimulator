@@ -1,11 +1,10 @@
 package com.tepe.raid.implementation.raid
 
-import com.tepe.raid.interfaces.Implementation
 import com.tepe.raid.interfaces.Raid
 import com.tepe.raid.repository.Postgres
 import com.tepe.raid.utils.DataContainer
 
-class zero : Raid {
+class Zero : Raid {
     private var sql = Postgres()
     private val raid = DataContainer.getInstance()
 
@@ -14,14 +13,23 @@ class zero : Raid {
     }
 
     override fun add(data: String): Boolean {
-        val length = if (data.length < raid.diskNumber)
-            data.length / raid.diskNumber
+        val dNumber = if (data.length < raid.diskNumber)
+            raid.diskNumber
         else data.length
 
-        for (i in 0 until length) {
+        val length = if (data.length < raid.diskNumber)
+            data.length / raid.diskNumber
+        else 1
+        var start = 0
+        var end = length - 1
+        val pivot = data.length - 1
+
+        for (i in 0 until dNumber) {
             raid.arrayDisk[i].let {
-                if (!sql.writeAt(it.name)) return false
+                if (!sql.writeAt(it.name, data.substring(start, end))) return false
             }
+            start = end + 1
+            end += if ((start + length) > pivot) (pivot - start) else length
         }
         raid.next()
         return true
@@ -38,6 +46,4 @@ class zero : Raid {
         }
         return data
     }
-
-
 }

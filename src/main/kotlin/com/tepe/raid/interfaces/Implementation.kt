@@ -7,7 +7,7 @@ interface Implementation {
 
     fun createDisk(group: Int, order: Int, type: RaidSetting, size: Int): String?
 
-    fun writeAt(disk: String): Boolean
+    fun writeAt(disk: String, data: String): Boolean
 
     fun readAt(index: Int, disk:String): String?
 
